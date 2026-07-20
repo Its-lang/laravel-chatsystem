@@ -31,7 +31,9 @@ router.beforeEach(async (to, from) => {
     const { data } = response;
     userStore.setState(data.user);
   } catch (error) {
-    userStore.reset();
+    if (error.response && error.response.status === 401) {
+      userStore.reset();
+    }
   }
 
   if (guarded && !userStore.isAuthenticated) { // if the route is guarded and the user is not authenticated, redirect to signin page
